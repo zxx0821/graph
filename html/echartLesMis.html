@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../assets/js/echarts.min.js"></script>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/dataToll.js"></script>
+    <title>Title</title>
+</head>
+<body style="height: 800px; margin:0;">
+<div id="container" style="height: 100%;"></div>
+<script>
+    let dom = document.getElementById('container');
+    let myChart = echarts.init(dom);
+    let app={};
+    option = null;
+    myChart.showLoading();
+    $.getJSON('../json/hecore.json', function (json) {
+        console.log(json);
+        myChart.hideLoading();
+        let graph = json;
+        //let graph = echarts.dataTool.gexf.parse(xml);
+        console.log(graph)
+        let categories = [];
+        for (let i = 0; i < 9; i++) {
+            categories[i] = {
+                name: '类目' + i
+            };
+        }
+        graph.nodes.forEach(function (node) {
+            node.itemStyle = null;
+            node.value = node.symbolSize;
+            //node.symbolSize /= 1.5;
+            node.label = {
+                normal: {
+                    show: node.symbolSize > 30
+                }
+            };
+            node.category = node.attributes.modularity_class;
+        });
+        option = {
+            title: {
+                text: 'Les Miserables',
+                subtext: 'Circular layout',
+                top: 'bottom',
+                left: 'right'
+            },
+            tooltip: {},
+            legend: [{
+                // selectedMode: 'single',
+                data: categories.map(function (a) {
+                    return a.name;
+                })
+            }],
+            animationDurationUpdate: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series : [
+                {
+                    name: 'Les Miserables',
+                    type: 'graph',
+                    layout: 'none',
+                    /*layout: 'circular',*/  /*圆形*/
+                   /* circular: {
+                        rotateLabel: true
+                    },*/
+                    data: graph.nodes,
+                    links: graph.links,
+                    categories: categories,
+                    roam: true,
+                    focusNodeAdjacency: true,  /*鼠标事件hover*/
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            position: 'right',
+                            formatter: '{b}'
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: 'source',
+                            curveness: 0.3
+                        }
+                    },
+                    emphasis: {    /*hover线条加粗*/
+                        lineStyle: {
+                            width: 10
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }, 'xml');
+</script>
+</body>
+</html>

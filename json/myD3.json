@@ -1,0 +1,76 @@
+{
+  "name": "flare",
+  "image": "../one.jpg",
+  "children": [
+    {
+      "name": "analytics",
+      "image": "../one.jpg",
+      "children": [
+        {
+          "name": "cluster",
+          "image": "../one.jpg",
+          "children": [
+            {"name": "AgglomerativeCluster", "image": "../one.jpg","size": 3938},
+            {"name": "CommunityStructure", "image": "../one.jpg","size": 3812},
+            {"name": "HierarchicalCluster", "image": "../one.jpg","size": 6714},
+            {"name": "MergeEdge", "image": "../one.jpg","size": 743}
+          ]
+        },
+        {
+          "name": "graph",
+          "image": "../one.jpg",
+          "children": [
+            {"name": "BetweennessCentrality", "image": "../one.jpg","size": 3534},
+            {"name": "LinkDistance", "image": "../one.jpg","size": 5731},
+            {"name": "MaxFlowMinCut", "image": "../one.jpg","size": 7840},
+            {"name": "ShortestPaths", "image": "../one.jpg","size": 5914},
+            {"name": "SpanningTree", "image": "../one.jpg","size": 3416}
+          ]
+        },
+        {
+          "name": "optimization",
+          "image": "../one.jpg",
+          "children": [
+            {"name": "AspectRatioBanker","image": "../one.jpg", "size": 7074}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "animate",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "data",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "display",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "flex",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "physics",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "query",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "scale",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "util",
+      "image": "../one.jpg"
+    },
+    {
+      "name": "vis",
+      "image": "../one.jpg"
+    }
+  ]
+}

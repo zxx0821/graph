@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>circleTree</title>
+<style>
+    .node circle {
+        fill: #999;
+    }
+
+    .node text {
+        font: 10px sans-serif;
+    }
+
+    .node--internal circle {
+        fill: #555;
+    }
+
+    .node--internal text {
+        text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+    }
+
+    .link {
+        fill: none;
+        stroke: #555;
+        stroke-opacity: 0.4;
+        stroke-width: 1.5px;
+    }
+
+</style>
+<svg width="960" height="900"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+    let svg = d3.select("svg"),    // d3.select("svg") 从文档中选择一个元素
+        width = +svg.attr("width"),  // svg.attr("width") 取得或设置属性的值。
+        height = +svg.attr("height"),  // svg.append("g")创建并追加一个新元素
+        g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + (height / 2 + 20) + ")"); // g标签及位置
+
+    let stratify = d3.stratify()     // d3.stratify()返回一个层次结构，用于层次布局中的数据结构
+        .parentId(function(d) {
+            return d.id.substring(0, d.id.lastIndexOf(".")); });
+
+    let cluster = d3.cluster()     // 簇布局
+        .size([360, width / 2 - 120]);   // 取得或设置布局的尺寸
+
+    d3.csv("../csv/circleTree.csv", function(error, data) {   // 请求一个csv文件,第一个是地址,第二个是回调函数
+        if (error) throw error;
+        let root = stratify(data)
+            .sort(function(a, b) { return a.height - b.height || a.id.localeCompare(b.id); });   // a.id.localeCompare(b.id) 用本地特定的顺序来比较两个字符串。
+
+        cluster(root);
+
+        let link = g.selectAll(".link")
+            .data(root.descendants().slice(1))   //data在计算相关的连接时，取得或设置一组元素的数据 descendant 后代  slice一个新的字符串。包括字符串 stringObject 从 start 开始（包括 start）到 end 结束（不包括 end）为止的所有字符。
+            .enter().append("path")             // enter 为缺失的元素返回占位符
+            .attr("class", "link")
+            .attr("d", function(d) {
+                return "M" + project(d.x, d.y)
+                    + "C" + project(d.x, (d.y + d.parent.y) / 2)
+                    + " " + project(d.parent.x, (d.y + d.parent.y) / 2)
+                    + " " + project(d.parent.x, d.parent.y);
+            });
+
+        let node = g.selectAll(".node")
+            .data(root.descendants())
+            .enter().append("g")
+            .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+            .attr("transform", function(d) { return "translate(" + project(d.x, d.y) + ")"; });
+
+        node.append("circle")
+            .attr("r", 2.5);
+
+        node.append("text")
+            .attr("dy", "0.31em")
+            .attr("x", function(d) { return d.x < 180 === !d.children ? 6 : -6; })
+            .style("text-anchor", function(d) { return d.x < 180 === !d.children ? "start" : "end"; })
+            .attr("transform", function(d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
+            .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
+    });
+
+    function project(x, y) {
+        let angle = (x - 90) / 180 * Math.PI, radius = y;
+        return [radius * Math.cos(angle), radius * Math.sin(angle)];
+    }
+
+</script>

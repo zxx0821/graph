@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="http://www.softwhy.com/" />
+    <title>蚂蚁部落</title>
+</head>
+<body>
+<svg id="svg" width="500px" height="500px" style="background-color: #f2f2f2"></svg>
+<script>
+    var svg = document.getElementById("svg");
+    svg.onclick = function(event) {
+        var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", event.offsetX);
+        circle.setAttribute("cy", event.offsetY);
+        circle.setAttribute("r", 10);
+        circle.setAttribute("fill", randomColor());
+        circle.setAttribute("opacity", 1);
+        svg.appendChild(circle);
+        var t = setInterval(function() {
+            var r = parseInt(circle.getAttribute("r"));
+            r++;
+            circle.setAttribute("r", r);
+            var opacity = parseFloat(circle.getAttribute("opacity"));
+            opacity -= 0.005;
+            circle.setAttribute("opacity", opacity);
+            if (opacity <= 0) {
+                circle.parentNode.removeChild(circle);
+                clearInterval(t);
+            }
+        }, 10);
+    }
+    function randomColor() {
+        var r = Math.floor(Math.random() * 256);
+        var g = Math.floor(Math.random() * 256);
+        var b = Math.floor(Math.random() * 256);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    }
+</script>
+</body>
+</html>

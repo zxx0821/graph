@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+    let r = 600;  // 半径
+    let duration = 760;   // 时间
+    let index = 0;      // 节点编号
+    let tree = d3.layout.tree()
+        .size([360, R/2-120])
+        .separation(function (a,b) {
+            return a.parent===b.parent ? 1 : 2;
+        })
+</script>
+</body>
+</html>
